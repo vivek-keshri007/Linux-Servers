@@ -1,0 +1,104 @@
+Lightweight Directory Access Protocol (LDAP) is a powerful tool for centralized authentication and user management. This guide will walk through setting up an OpenLDAP server on Debian 12 and configuring a client system to authenticate users via LDAP.
+
+Step 1: Install OpenLDAP Server on Debian 12
+update the package and install the OpenLDAP package
+sudo apt update
+sudo apt install slapd ldap-utils
+during the installation you will be asked for the configuration of LDAP, if no then you can configure it later by using
+sudo dpkg-reconfigure slapd
+=========== configuration ==============
+
+    * Omit OpenLDAP server configuration? → No
+    * Domain Name → example.com (creates dc=example,dc=com)
+    * Organization Name → (Your Organization Name)
+    * Admin Password → (Choose a secure Password)
+    * Database backend → MDB
+    * Remove database when slapd is purged? → No
+    * Move old database? → Yes
+verify the status of OpenLDAP Service
+systemctl status slapd.service
+Confirm LDAP Directory Structure
+ldapsearch -x -H ldap://localhost -b dc=example,dc=com
+Step 2: Create LDAP Organizational Units
+Create a file named base_config.ldif to define organizational units:
+vim base.ldif
+Add the following configuration in the file:
+dn: ou=users,dc=example,dc=com
+objectClass: organizationalUnit
+ou: users
+
+dn: ou=groups,dc=example,dc=com
+objectClass: organizationalUnit
+ou: groups
+Load the configurations into LDAP , You will be asked for the password of admin you set while installing the OpenLDAP.
+ldapadd -x -D "cn=admin,dc=example,dc=com" -W -f base_config.ldif
+Step 3: Add LDAP Groups
+Create a file named addgroup.ldif:
+vim addgroup.ldif
+Add the following in the file:
+dn: cn=ldapusers,ou=groups,dc=example,dc=com
+objectClass: posixGroup
+cn: ldapusers
+gidNumber: 1001
+memberUid: johndoe
+Load the group into LDAP
+ldapadd -x -D "cn=admin,dc=example,dc=com" -W -f addgroup.ldif
+Step 4: Add an LDAP User
+Create a file named adduser.ldif:
+dn: uid=johndoe,ou=users,dc=example,dc=com
+objectClass: inetOrgPerson
+objectClass: posixAccount
+objectClass: shadowAccount
+cn: John Doe
+sn: Doe
+uid: johndoe
+uidNumber: 1001
+gidNumber: 1001
+homeDirectory: /home/johndoe
+loginShell: /bin/bash
+userPassword: {CRYPT}$6$saltsalt$hashedpasswordhere
+Load the user into LDAP
+ldapadd -x -D "cn=admin,dc=example,dc=com" -W -f adduser.ldif
+Manually set the password for the user
+ldappasswd -s securepassword -D "cn=admin,dc=example,dc=com" -W "uid=johndoe,ou=users,dc=example,dc=com"
+LDAP Client Configuration on Debian 12
+Step 5: Install Required Packages
+On the client system, install LDAP authentication packages
+sudo apt update
+sudo apt install libnss-ldapd libpam-ldapd ldap-utils nscd
+During the installation provide these details
+* LDAP URI: ldap://<server-ip>
+* Search base: dc=example,dc=com
+* LDAP version: 3
+If needed, reconfigure LDAP settings:
+sudo dpkg-reconfigure libnss-ldapd
+Step 6: Modify NSS Configuration
+sudo vim /etc/nsswitch.conf
+update the following: This ensures that system authentication checks LDAP after local files.
+passwd:         files ldap
+group:          files ldap
+shadow:         files ldap
+Step 7: Enable Home Directory Creation for LDAP Users
+Edit the PAM session configuration file:
+sudo nano /etc/pam.d/common-session
+Add the following line at the end: This ensures that a home directory is created automatically for LDAP users upon first login.
+session required pam_mkhomedir.so skel=/etc/skel umask=077
+Restart the caching service to apply changes:
+sudo systemctl restart nscd
+Step 9: Verify LDAP User Authentication
+Check if the LDAP user is recognized by the system:
+getent passwd johndoe
+Expected Output for the command :-
+
+johndoe:x:1001:1001:John Doe:/home/johndoe:/bin/bash
+Check LDAP group membership:
+getent group ldapusers
+Expected Output for the command :-
+ldapusers:x:1001:johndoe
+To test logging in as the LDAP user:
+su - johndoe
+
+ELSE try using SSH
+
+ssh johndoe@<client-ip>
+Note:- If everything is set up correctly, the user should log in successfully and have their home directory created automatically.
