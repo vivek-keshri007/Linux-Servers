@@ -21,25 +21,25 @@ Check if DHCP Server packages are installed or not.
 # 5. Detailed Information about DHCP Server: 
 Display Detailled information about the installed DHCP Server packages.
 - ```bash
-  rpm -qi | grep dhcp-server
+  rpm -qi dhcp-server
 # 6. List documentation files of DHCP Server: 
 List the documentation files included with DHCP Server. 
 - ```bash
-  rpm -qd | grep dhcp-server
+  rpm -qd dhcp-server
 # 7. List configuration files for DHCP Server: 
 List the configuration files included for DHCP Server. 
 - ```bash
-  rpm -qc | grep dhcp-server
+  rpm -qc dhcp-server
 # 8. List all files installed in DHCP Server Packages: 
 List all the files included with DHCP Server in its packages. 
 - ```bash
-  rpm -ql | grep dhcp-server
+  rpm -ql dhcp-server
 # 9. Example of Configuration File: 
 display the example configuration file for dhcp configuration.
 - ```bash
-  vim /user/share/doc/dhcp-server/dhcpd.conf.example
+  vvim /usr/share/doc/dhcp-server/dhcpd.conf.example
 - ```bash
-  cat /user/share/doc/dhcp-server/dhcpd.conf.example | less
+  cat /usr/share/doc/dhcp-server/dhcpd.conf.example | less
 # 10. Edit the configuration file: 
 Open the DHCP configuration file to edit it by reference from example file.
 - ```bash
@@ -84,7 +84,7 @@ Start Service:
 Restart Service:
 - ```bash
   systemctl restart dhcpd
-Enable Service to Start at boot
+Enable Service to Start at boot: 
 - ```bash
   systemctl enable dhcp
 # 12. Check Open Ports:
