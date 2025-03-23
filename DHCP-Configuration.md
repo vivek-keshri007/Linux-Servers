@@ -37,7 +37,7 @@ List all the files included with DHCP Server in its packages.
 # 9. Example of Configuration File: 
 display the example configuration file for dhcp configuration.
 - ```bash
-  vvim /usr/share/doc/dhcp-server/dhcpd.conf.example
+  vim /usr/share/doc/dhcp-server/dhcpd.conf.example
 - ```bash
   cat /usr/share/doc/dhcp-server/dhcpd.conf.example | less
 # 10. Edit the configuration file: 
