@@ -5,7 +5,7 @@ List all available repos to ensure DHCP Server package is available or not.
 - ```bash
   yum repolist all
 # 2. Verify if DHCP Package is installed or not:
-check it by rpm and grep command.
+Check it by rpm and grep command.
 - ```bash
   rpm -qa | grep dhcp
 # 3. Install DHCP Server: 
@@ -35,7 +35,7 @@ List all the files included with DHCP Server in its packages.
 - ```bash
   rpm -ql dhcp-server
 # 9. Example of Configuration File: 
-display the example configuration file for dhcp configuration.
+Display the example configuration file for dhcp configuration.
 - ```bash
   vim /usr/share/doc/dhcp-server/dhcpd.conf.example
 - ```bash
@@ -84,7 +84,7 @@ Start Service:
 Restart Service:
 - ```bash
   systemctl restart dhcpd
-Enable Service to Start at boot: 
+Enable Service to Start at boot.
 - ```bash
   systemctl enable dhcp
 # 12. Check Open Ports:
@@ -95,23 +95,23 @@ Check if DHCP ports are Open.
 - ```bash
   netstat -nltup | grep dhcp
 # 13. Update Firewall Rule:
-  Open DHCP Ports in firewall
-  allow dhcp traffic through firewalld:
+ # Open DHCP Ports in firewall:
+  Allow dhcp traffic through firewalld.
   - ```bash
     firewall-cmd --add-port=67/udp --permanent
-  Reload Firewall:
-  Reload the firewall to apply changes:
+ # Reload Firewall:
+  Reload the firewall to apply changes.
   - ```bash
     firewall-cmd --reload
-  Verify Firewall Rule:
-  Assure DHCP port is open or not:
+ # Verify Firewall Rule:
+  Assure DHCP port is open or not.
   - ```bash
     firewall-cmd --list-ports
-  Check detailed firewall configuration
+  Check detailed firewall configuration.
   - ```bash
     firewall-cmd --list-all
 # 14. Check DHCP Leases: 
-   Display current DHCP leases:
+   Display current DHCP leases.
  - ```bash
    cat /var/lib/dhcpd/dhcpd.leases 
   
