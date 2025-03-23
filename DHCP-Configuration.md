@@ -95,15 +95,15 @@ Check if DHCP ports are Open.
 - ```bash
   netstat -nltup | grep dhcp
 # 13. Update Firewall Rule:
-- Open DHCP Ports in firewall
+  Open DHCP Ports in firewall
   allow dhcp traffic through firewalld:
   - ```bash
     firewall-cmd --add-port=67/udp --permanent
-- Reload Firewall:
+  Reload Firewall:
   Reload the firewall to apply changes:
   - ```bash
     firewall-cmd --reload
-- Verify Firewall Rule:
+  Verify Firewall Rule:
   Assure DHCP port is open or not:
   - ```bash
     firewall-cmd --list-ports
@@ -111,7 +111,7 @@ Check if DHCP ports are Open.
   - ```bash
     firewall-cmd --list-all
 # 14. Check DHCP Leases: 
- - Display current DHCP leases:
+   Display current DHCP leases:
  - ```bash
    cat /var/lib/dhcpd/dhcpd.leases 
   
