@@ -44,7 +44,7 @@ display the example configuration file for dhcp configuration.
 Open the DHCP configuration file to edit it by reference from example file.
 - ```bash
   vim /etc/dhcp/dhcpd.conf
-# Configuration will look like this:  
+# Configuration should look like this:  
 -  ```bash
    ## DHCP Server Configuration file.
    #   see /usr/share/doc/dhcp-server/dhcpd.conf.example
